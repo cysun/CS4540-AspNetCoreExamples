@@ -1,4 +1,7 @@
 {
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=cs4540;User ID=cysun;Password=abcd;"
+  },
   "Logging": {
     "LogLevel": {
       "Default": "Information",
