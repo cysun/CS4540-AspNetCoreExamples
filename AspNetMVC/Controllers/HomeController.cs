@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AspNetMVC.Models;
+using Microsoft.AspNetCore.Routing.Patterns;
 
 namespace AspNetMVC.Controllers
 {
@@ -32,6 +33,12 @@ namespace AspNetMVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Route("Help")]
+        public IActionResult Help()
+        {
+            return View();
         }
     }
 }

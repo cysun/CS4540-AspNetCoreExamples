@@ -9,6 +9,10 @@ namespace AspNetMVC.Services
     public interface IEmployeeService
     {
         List<Employee> GetEmployees();
+
+        Employee GetEmployee(int id);
+
+        void AddEmployee(Employee e);
     }
 
     public class EmployeeService : IEmployeeService
@@ -23,6 +27,17 @@ namespace AspNetMVC.Services
         public List<Employee> GetEmployees()
         {
             return _db.Employees.ToList();
+        }
+
+        public Employee GetEmployee(int id)
+        {
+            return _db.Employees.Find(id);
+        }
+
+        public void AddEmployee(Employee e)
+        {
+            _db.Employees.Add(e);
+            _db.SaveChanges();
         }
     }
 
@@ -52,6 +67,17 @@ namespace AspNetMVC.Services
         public List<Employee> GetEmployees()
         {
             return employees;
+        }
+
+        public Employee GetEmployee(int id)
+        {
+            return employees[id - 1];
+        }
+
+        public void AddEmployee(Employee e)
+        {
+            e.Id = employees.Count;
+            employees.Add(e);
         }
     }
 }

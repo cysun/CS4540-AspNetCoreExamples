@@ -25,7 +25,7 @@ CREATE INDEX [IX_Employees_SupervisorId] ON [Employees] ([SupervisorId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20200707174032_InitialSchema', N'3.1.5');
+VALUES (N'20200707214455_InitialSchema', N'3.1.5');
 
 GO
 
