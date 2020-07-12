@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AspNetMVC.Models;
 using AspNetMVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
 
 namespace AspNetMVC.Controllers
@@ -44,6 +45,28 @@ namespace AspNetMVC.Controllers
         {
             _employeeService.AddEmployee(e);
             return RedirectToAction(nameof(List));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Supervisors = _employeeService.GetEmployees().Where(e => e.Id != id).Select(e => new SelectListItem
+            {
+                Text = e.Name,
+                Value = e.Id.ToString()
+            });
+            return View(_employeeService.GetEmployee(id));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Employee e)
+        {
+            var employee = _employeeService.GetEmployee(e.Id);
+            employee.Name = e.Name;
+            employee.DateHired = e.DateHired;
+            employee.SupervisorId = e.SupervisorId;
+            _employeeService.SaveChanges();
+            return RedirectToAction(nameof(View), new { id = e.Id });
         }
     }
 }

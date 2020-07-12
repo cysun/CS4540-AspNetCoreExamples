@@ -1,8 +1,20 @@
 ﻿@model Employee
 
-<ul>
-    <li>@Model.Id</li>
-    <li>@Model.Name</li>
-    <li>@Model.DateHired</li>
-    <li>@Model.SupervisorId</li>
-</ul>
+    <table class="table">
+        <tr>
+            <th role="row">Id</th>
+            <td>@Model.Id</td>
+        </tr>
+        <tr>
+            <th role="row">Name</th>
+            <td>@Model.Name</td>
+        </tr>
+        <tr>
+            <th role="row">Date Hired</th>
+            <td>@Model.DateHired.ToString("d")</td>
+        </tr>
+        <tr>
+            <th role="row">Supervisor</th>
+            <td>@Model.Supervisor?.Name</td>
+        </tr>
+    </table>

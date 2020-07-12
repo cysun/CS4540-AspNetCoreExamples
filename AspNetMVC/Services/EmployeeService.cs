@@ -1,4 +1,5 @@
 ﻿using AspNetMVC.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace AspNetMVC.Services
         Employee GetEmployee(int id);
 
         void AddEmployee(Employee e);
+
+        void SaveChanges();
     }
 
     public class EmployeeService : IEmployeeService
@@ -31,7 +34,7 @@ namespace AspNetMVC.Services
 
         public Employee GetEmployee(int id)
         {
-            return _db.Employees.Find(id);
+            return _db.Employees.Where(e => e.Id == id).Include(e => e.Supervisor).SingleOrDefault();
         }
 
         public void AddEmployee(Employee e)
@@ -39,6 +42,8 @@ namespace AspNetMVC.Services
             _db.Employees.Add(e);
             _db.SaveChanges();
         }
+
+        public void SaveChanges() => _db.SaveChanges();
     }
 
     public class MockEmployeeService : IEmployeeService
@@ -79,5 +84,8 @@ namespace AspNetMVC.Services
             e.Id = employees.Count;
             employees.Add(e);
         }
+
+        public void SaveChanges()
+        { }
     }
 }
