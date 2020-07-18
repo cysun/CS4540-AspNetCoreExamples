@@ -1,0 +1,51 @@
+﻿@model List<int>
+
+@section StyleSheets{
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+}
+
+<h3>Line Chart Using Chartist</h3>
+<div class="ct-chart"></div>
+
+<h3 class="mt-3">Bar Chart Using Chart.js</h3>
+<canvas id="myChart" width="400" height="200"></canvas>
+
+@section Scripts{
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
+            integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
+            crossorigin="anonymous"></script>
+    <script>
+    var data = {
+        labels: @Json.Serialize(ViewBag.Dates),
+        series: [
+            @Json.Serialize(Model)
+        ]
+    };
+    new Chartist.Line(".ct-chart", data);
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: @Json.Serialize(ViewBag.Dates),
+                datasets: [
+                    {
+                        label: "Cases",
+                        data: @Json.Serialize(Model),
+                        backgroundColor: 'red'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
