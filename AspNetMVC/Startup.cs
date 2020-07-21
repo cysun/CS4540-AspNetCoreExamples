@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetMVC.Security;
 using AspNetMVC.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +31,21 @@ namespace AspNetMVC
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsAdmin", policyBuilder => policyBuilder
+                    .RequireClaim("IsAdmin", "True"));
+                options.AddPolicy("CanAccessEmployee", policyBuilder => policyBuilder
+                    .AddRequirements(new CanAccessEmployeeRequirement()));
+            });
+
+            services.AddScoped<IAuthorizationHandler, CanAccessEmployeeHandler>();
+
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<LoginService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +63,7 @@ namespace AspNetMVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

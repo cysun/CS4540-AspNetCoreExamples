@@ -1,4 +1,5 @@
-﻿@model List<Employee>
+﻿@inject Microsoft.AspNetCore.Authorization.IAuthorizationService authorizationService
+@model List<Employee>
 
 <p><a asp-action="Add" class="btn btn-primary">Add</a></p>
 
@@ -11,8 +12,22 @@
         {
             <tr>
                 <td>@employee.Id</td>
-                <td><a asp-action="View" asp-route-id="@employee.Id">@employee.Name</a></td>
-                <td><a asp-action="Edit" asp-route-id="@employee.Id">Edit</a></td>
+                <td>
+                    @if ((await authorizationService.AuthorizeAsync(User, employee.Id, "CanAccessEmployee")).Succeeded)
+                    {
+                        <a asp-action="View" asp-route-id="@employee.Id">@employee.Name</a>
+                    }
+                    else
+                    {
+                        @employee.Name
+                    }
+                </td>
+                <td>
+                    @if ((await authorizationService.AuthorizeAsync(User, employee.Id, "CanAccessEmployee")).Succeeded)
+                    {
+                        <a asp-action="Edit" asp-route-id="@employee.Id">Edit</a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

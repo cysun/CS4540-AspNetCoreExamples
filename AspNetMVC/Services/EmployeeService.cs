@@ -13,6 +13,8 @@ namespace AspNetMVC.Services
 
         Employee GetEmployee(int id);
 
+        Employee GetEmployee(string name);
+
         void AddEmployee(Employee e);
 
         void SaveChanges();
@@ -35,6 +37,11 @@ namespace AspNetMVC.Services
         public Employee GetEmployee(int id)
         {
             return _db.Employees.Where(e => e.Id == id).Include(e => e.Supervisor).SingleOrDefault();
+        }
+
+        public Employee GetEmployee(string name)
+        {
+            return _db.Employees.Where(e => e.Name == name).FirstOrDefault();
         }
 
         public void AddEmployee(Employee e)
@@ -77,6 +84,11 @@ namespace AspNetMVC.Services
         public Employee GetEmployee(int id)
         {
             return employees[id - 1];
+        }
+
+        public Employee GetEmployee(string name)
+        {
+            return employees.Where(e => e.Name == name).FirstOrDefault();
         }
 
         public void AddEmployee(Employee e)
