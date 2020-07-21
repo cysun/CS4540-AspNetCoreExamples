@@ -43,6 +43,7 @@ namespace AspNetMVC.Controllers
         [HttpPost]
         public IActionResult Add(Employee e)
         {
+            e.Hash = BCrypt.Net.BCrypt.HashPassword("abcd");
             _employeeService.AddEmployee(e);
             return RedirectToAction(nameof(List));
         }
